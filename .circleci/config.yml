@@ -76,13 +76,9 @@ jobs:
           keys: [frontend-test]
       # Your job code here
       - run:
-          name: test-frontend
+          name: Run frontend tests
           command: |
             cd frontend && npm install && npm run test
-      - save_cache:
-          paths: [frontend/node_modules]
-          keys: frontend-test
-                
   test-backend:
     docker:
       # Docker image here
@@ -95,12 +91,9 @@ jobs:
           keys: [backend-test]
       # Your job code here
       - run:
-          name: test-backend
-          command:  |
+          name: run backend tests
+          command: |
             cd backend && npm install && npm run test
-      - save_cache:
-          paths: [backend/node_modules]
-          keys: test-backend
             
 #   scan-frontend:
 #     docker:
