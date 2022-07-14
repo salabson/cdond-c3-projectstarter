@@ -96,7 +96,7 @@ jobs:
       # Your job code here
       - run:
           name: test-backend
-          command:|
+          command:  |
             cd backend && npm install && npm run test
       - save_cache:
           paths: [backend/node_modules]
