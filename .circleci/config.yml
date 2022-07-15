@@ -106,9 +106,9 @@ jobs:
           keys: [frontend-scan]
       # Your job code here
       - run:
-        name: Scan frontendfor vulnerabilities
-        command: |
-          cd frontend && npm install && npm audit --audit-level=critical
+          name: Scan frontendfor vulnerabilities
+          command: |
+            cd frontend && npm install && npm audit --audit-level=critical
 
   scan-backend:
     docker:
@@ -121,9 +121,9 @@ jobs:
           keys: [backend-scan]
       # Your job code here
       - run:
-        name: Scan backend for vulnerabilities
-        command: |
-          cd backend && npm install && npm audit --audit-level=critical
+          name: Scan backend for vulnerabilities
+          command: |
+            cd backend && npm install && npm audit --audit-level=critical
 
 #   deploy-infrastructure:
 #     docker:
