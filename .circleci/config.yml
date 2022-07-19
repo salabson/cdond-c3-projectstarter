@@ -160,7 +160,7 @@ jobs:
       - run: 
           name: installl tar
           command: |
-            sudo apt-get install -y tar
+            apt-get install -y tar
       - persist_to_workspace:
           root: ~/
           paths:
