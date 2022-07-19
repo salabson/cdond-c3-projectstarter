@@ -12,8 +12,8 @@ commands:
           name: Destroy environments
           when: on_fail
           command: |
-            aws cloudformation delete-stack --stack-name udapeople-backend-${parameters.workflow_id}
-            aws cloudformation delete-stack --stack-name udapeople-frontend-${parameters.workflow_id}
+            aws cloudformation delete-stack --stack-name "udapeople-backend- << parameters.workflow_id >>"
+            aws cloudformation delete-stack --stack-name "udapeople-frontend- << parameters.workflow_id >>"
            
 #   revert-migrations:
 #     description: Revert the last migration if successfully run in the current workflow.
@@ -156,7 +156,11 @@ jobs:
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:project,Values=udapeople" \
-              --output text >> inventory
+              --output text >> ansible/inventory
+      - run: 
+          name: installl tar
+          command: |
+            sudo apt-get install -y tar
       - persist_to_workspace:
           root: ~/
           paths:
