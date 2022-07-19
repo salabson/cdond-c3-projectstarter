@@ -158,9 +158,9 @@ jobs:
               --filters "Name=tag:project,Values=udapeople" \
               --output text >> inventory
       - run: 
-          name: installl tar
+          name: install tar utility
           command: |
-            apt-get install -y tar
+            yum install -y tar gzip
       - persist_to_workspace:
           root: ~/
           paths:
