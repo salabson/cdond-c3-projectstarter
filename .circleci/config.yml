@@ -141,7 +141,7 @@ jobs:
               --template-file .circleci/files/backend.yml \
               --tags project="udapeople"\
               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID}"\
-              --parameter-overrides ID="udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
       - run:
           name: Ensure front-end infrastructure exist
           command: |
@@ -149,14 +149,14 @@ jobs:
               --template-file .circleci/files/frontend.yml \
               --tags project="udapeople" \
               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID}" \
-              --parameter-overrides ID="udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
       - run:
           name: Add back-end ip to ansible inventory
           command: |
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:project,Values=udapeople" \
-              --output text >> inventory
+              --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --output text >> .circleci/ansible/inventory.txt
       - run: 
           name: install tar utility
           command: |
