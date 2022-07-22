@@ -186,9 +186,9 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update ansible
-            sudo yum install -y tar gzip
-            sudo yum install awscli
-            sudo yum update awscli
+            yum install -y tar gzip
+            yum install awscli
+            yum update awscli
       - run:
           name: Configure server
           command: |
