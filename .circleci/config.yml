@@ -244,6 +244,7 @@ jobs:
             yum install ansible
             yum install nodejs
             yum install npm
+            yum load-transaction /tmp/yum_save_tx.2022-07-23.13-12.g2W7yp.yumtx
       - attach_workspace:
           at: ~/
       - run:
