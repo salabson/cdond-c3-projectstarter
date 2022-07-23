@@ -241,7 +241,6 @@ jobs:
           command: |
             yum install -y tar gzip
             yum install -y python3
-            yum install -y ansible
             yum install -y nodejs
             yum install -y npm
       - attach_workspace:
