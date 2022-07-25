@@ -243,7 +243,7 @@ jobs:
             yum install -y tar gzip
             yum install -y curl.x86_64
             yum install -y gcc-c++ make
-            curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash –
+            curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
             sudo yum install -y nodejs
       - attach_workspace:
           at: ~/
