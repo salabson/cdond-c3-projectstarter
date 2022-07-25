@@ -240,9 +240,10 @@ jobs:
           name: Install dependencies
           command: |
             yum install -y tar gzip
-            yum install -y python3
+            yum install -y curl.x86_64
+            yum install -y gcc-c++ make
+            curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash –
             yum install -y nodejs
-            yum install -y npm
       - attach_workspace:
           at: ~/
       - run:
