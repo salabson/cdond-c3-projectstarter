@@ -241,7 +241,6 @@ jobs:
           command: |
             yum install sudo -y
             yum install -y tar gzip
-            yum install makecache
             yum install -y curl.x86_64
             yum install -y gcc-c++ make
             curl -sL https://rpm.nodesource.com/setup_13.x | sudo -E bash -
