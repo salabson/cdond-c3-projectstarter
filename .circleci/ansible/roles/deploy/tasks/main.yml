@@ -1,18 +1,13 @@
 ---
-- name: "update apt packages."
-  become: yes
-  apt:
-    update_cache: yes
+- name: Create app directory
+  file:
+    path: $HOME/web
+    state: directory
 
-- name: "upgrade packages"
-  become: yes
-  apt:
-    upgrade: yes
-
-- name: "Remove the dependencies that are no longer required"
-  become: yes
-  apt:
-    autoremove: yes
+- name: "Copy files to server"
+  ansible.builtin.copy:
+    src: "files/artifact.tar.gz"
+    dest: "$HOME/artifact.tar.gz"
 
 - name: "Install dependecies"
   become: yes
@@ -21,12 +16,16 @@
     state: latest
     update_cache: yes
 
-- name: "Install pm"
-  become: yes
-  npm:
-    name: pm2
-    global: yes
-    production: yes
-    state: present
+- name: "Install Dependencies"
+  become: true
+  shell: |
+    tar -xvf artifact.tar.gz .
+    rm artifact.tar.gz
+    npm install
+- name: "Start Server"
+  become: true
+  shell: |
+    sudo pm2 stop default
+    sudo pm2 start npm -- run start
 
 
