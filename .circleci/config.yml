@@ -272,22 +272,38 @@ jobs:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}   
 
                     
-#   deploy-backend:
-#     docker:
-#       # Docker image here that supports Ansible
-#     steps:
-#       # Checkout code from git
-#       # Add ssh keys with fingerprint
-#       # attach workspace
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # your code here
-#       - run:
-#           name: Deploy backend
-#           command: |
-#             # your code here
-#       # Here's where you will add some code to rollback on failure  
+  deploy-backend:
+    docker:
+      # Docker image here that supports Ansible
+      - image: python:3.7-alpine3.11
+    steps:
+      # Checkout code from git
+      # Add ssh keys with fingerprint
+      - add_ssh_keys:
+          fingerprints: [12:a7:90:a2:03:c2:57:a6:28:79:2c:41:da:44:54:62]
+      # attach workspace
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update ansible
+            apk add --update tar gzip
+            apk add --update nodejs
+            apk add --update npm
+      - run:
+          name: Deploy backend
+          command: |
+            cd backend
+            npm i
+            npm run build
+            cd ..
+            tar -C backend -czvf artifact.tar.gz .
+            cd .circleci/ansible
+            echo "Contents  of the inventory.txt file is -------"
+            cat .circleci/ansible/inventory.txt
+            ansible-playbook -i inventory.txt deploy-backend.yml
+      # Here's where you will add some code to rollback on failure  
 
 #   smoke-test:
 #     docker:
@@ -371,8 +387,8 @@ workflows:
           requires: [configure-infrastructure]
       - deploy-frontend:
           requires: [run-migrations]
-      # - deploy-backend:
-      #     requires: [run-migrations]
+      - deploy-backend:
+          requires: [run-migrations]
       # - smoke-test:
       #     requires: [deploy-backend, deploy-frontend]
       # - cloudfront-update:
