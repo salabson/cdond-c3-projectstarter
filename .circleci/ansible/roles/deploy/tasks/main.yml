@@ -15,6 +15,14 @@
     name: ["nodejs", "npm"]
     state: latest
     update_cache: yes
+    
+- name: "Install pm"
+  become: yes
+  npm:
+    name: pm2
+    global: yes
+    production: yes
+    state: present
 
 - name: "Install Dependencies"
   become: true
