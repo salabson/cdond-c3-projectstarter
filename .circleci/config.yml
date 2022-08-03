@@ -333,12 +333,12 @@ jobs:
               --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" 
               --output text )
             export API_URL="http://${BACKEND_IP}:3030"
-            echo "${API_URL}" >> api_url
+            echo "${API_URL}" >> api_url.txt
             
       - run:
-          name: Backend smoke test.
+          name: Backend smoke test
           command: |
-            export API_URL="$(cat ip.txt)"
+            export API_URL="$(cat api_url.txt)"
             if curl "${API_URL}/api/status" | grep "ok"
             then
                 return 0
