@@ -336,7 +336,7 @@ jobs:
             echo "${API_URL}" >> api_url.txt
             
       - run:
-          name: Backend smoke test
+          name: Backend smoke test.
           command: |
             export API_URL="$(cat api_url.txt)"
             if curl "${API_URL}/api/status" | grep "ok"
