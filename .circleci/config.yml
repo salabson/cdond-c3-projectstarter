@@ -229,7 +229,12 @@ jobs:
             fi
      # Here's where you will add some code to rollback on failures
       - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}   
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+
+      
+   
 
   deploy-frontend:
     docker:
@@ -271,7 +276,11 @@ jobs:
 
       # Here's where you will add some code to rollback on failure 
       - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}   
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+       - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+
+      
 
                     
   deploy-backend:
@@ -310,6 +319,8 @@ jobs:
             ansible-playbook -i inventory.txt deploy-backend.yml
       # Here's where you will add some code to rollback on failure  
       - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+       - revert-migrations:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   smoke-test:
@@ -364,20 +375,35 @@ jobs:
       - revert-migrations:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
-#   cloudfront-update:
-#     docker:
-#       # Docker image here that supports AWS CLI
-#     steps:
-#       # Checkout code from git
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # your code here
-#       - run:
-#           name: Update cloudfront distribution
-#           command: |
-#             # your code here
-#       # Here's where you will add some code to rollback on failure  
+  cloudfront-update:
+    docker:
+      # Docker image here that supports AWS CLI
+      - image:  amazon/aws-cli
+    steps:
+      # Checkout code from git
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            yum install sudo -y
+            yum install -y tar gzip
+            yum install -y curl.x86_64
+            yum install -y gcc-c++ make
+            curl -sL https://rpm.nodesource.com/setup_13.x | sudo -E bash -
+            sudo yum install -y nodejs
+      - run:
+          name: Update cloudfront distribution
+          command: |
+            aws cloudformation deploy \
+            --template-file .circleci/files/cloudfront.yml \
+            --stack-name InitialStack \
+            --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --tags project=udapeople
+      # Here's where you will add some code to rollback on failure 
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
 
 # cleanup:
 #     docker:
@@ -427,7 +453,7 @@ workflows:
           requires: [run-migrations]
       - smoke-test:
           requires: [deploy-backend, deploy-frontend]
-      # - cloudfront-update:
-      #     requires: [smoke-test]
+      - cloudfront-update:
+          requires: [smoke-test]
       # - cleanup:
       #     requires: [cloudfront-update]
