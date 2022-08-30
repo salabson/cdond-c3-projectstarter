@@ -4,10 +4,11 @@
     path: $HOME/web
     state: directory
 
-- name: "Copy files to server"
-  ansible.builtin.copy:
-    src: "files/artifact.tar.gz"
-    dest: "$HOME/artifact.tar.gz"
+- name: "Extract artifacts"
+    become: true
+    copy:
+      src: "files/artifact.tar.gz"
+      dest: "$HOME/web/"
 
 - name: "Install dependecies"
   become: yes
@@ -29,11 +30,22 @@
   shell: |
     tar -xvf artifact.tar.gz .
     rm artifact.tar.gz
-    npm install
+    npm 
+
+- name: "Where are we"
+  become: true
+  shell: |
+    pwd && ls -la & echo "May be we are here"
+    cd web
+    ls -a
+
 - name: "Start Server"
   become: true
   shell: |
+    cd ~/web/
     sudo pm2 stop default 
-    sudo pm2 start npm -- run start 
+    sudo pm2 start npm -- run start
+  register: web
+
 
 
