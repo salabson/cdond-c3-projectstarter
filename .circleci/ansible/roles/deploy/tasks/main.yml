@@ -4,11 +4,11 @@
     path: $HOME/web
     state: directory
 
-- name: "Extract artifacts"
-    become: true
-    copy:
-      src: "files/artifact.tar.gz"
-      dest: "$HOME/web/"
+- name: "Copy artifacts"
+  become: true
+  copy:
+  src: "files/artifact.tar.gz"
+  dest: "$HOME/web/"
 
 - name: "Install dependecies"
   become: yes
@@ -25,17 +25,18 @@
     production: yes
     state: present
 
-- name: "Install Dependencies"
+- name: "Extract artifacts"
   become: true
   shell: |
-    tar -xvf artifact.tar.gz .
-    rm artifact.tar.gz
-    npm 
+    tar -xvf ~/web/artifact.tar.gz 
+    ls
+    cd ~/web/artifact
+    ls
 
 - name: "Where are we"
   become: true
   shell: |
-    pwd && ls -la & echo "May be we are here"
+    pwd && ls -la & echo "May be where we are here"
     cd web
     ls -a
 
