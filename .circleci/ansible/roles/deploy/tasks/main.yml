@@ -7,8 +7,8 @@
 - name: "Copy artifacts"
   become: true
   copy:
-  src: "files/artifact.tar.gz"
-  dest: "$HOME/web/"
+    src: "files/artifact.tar.gz"
+    dest: "$HOME/web/"
 
 - name: "Install dependecies"
   become: yes
