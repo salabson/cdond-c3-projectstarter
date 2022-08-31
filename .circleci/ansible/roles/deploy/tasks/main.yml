@@ -36,7 +36,7 @@
 - name: "Where are we"
   become: true
   shell: |
-    pwd && ls -la & echo "May be where we are here"
+    pwd && ls -la && echo "May be we are here"
     cd web
     ls -a
 
@@ -47,6 +47,9 @@
     sudo pm2 stop default 
     sudo pm2 start npm -- run start
   register: web
+  
+- debug:
+    msg: "{{ web.stdout_lines }}"
 
 
 
