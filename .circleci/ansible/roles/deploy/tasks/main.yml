@@ -1,14 +1,14 @@
 ---
 - name: Create app directory
   file:
-    path: $HOME/backend-app
+    path: ~/backend-app
     state: directory
 
 - name: "Extract tar/zip file"
   become: true
   unarchive:
     src: ~/project/artifact.tar.gz
-    dest: $HOME/backend-app/
+    dest: ~/backend-app/
 
 - name: "Install dependecies"
   become: yes
@@ -28,20 +28,20 @@
 - name: "Install backend dependecies"
   become: yes
   shell: |
-    cd $HOME/backend-app/
+    cd ~/backend-app/
     npm install
 
 - name: "Where are we"
   become: true
   shell: |
     pwd && ls -la && echo "May be we are here"
-    cd $HOME/backend-app/
+    cd ~/backend-app/
     ls -a
 
 - name: "Start Server"
   become: true
   shell: |
-    cd $HOME/backend-app/
+    cd ~/backend-app/
     sudo pm2 stop default 
     sudo pm2 start npm -- run start
   register: web
