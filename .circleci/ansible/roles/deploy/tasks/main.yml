@@ -1,14 +1,14 @@
 ---
 - name: Create app directory
   file:
-    path: $HOME/web
+    path: $HOME/backend-app
     state: directory
 
-- name: "Copy artifacts"
+- name: "Extract tar/zip file"
   become: true
-  copy:
-    src: "files/artifact.tar.gz"
-    dest: "$HOME/web/"
+  unarchive:
+    src: /home/circleci/project/artifact.tar.gz
+    dest: $HOME/backend-app/
 
 - name: "Install dependecies"
   become: yes
@@ -25,25 +25,23 @@
     production: yes
     state: present
 
-- name: "Extract artifacts"
-  become: true
+- name: "Install backend dependecies"
+  become: yes
   shell: |
-    tar -xvf ~/web/artifact.tar.gz 
-    ls
-    cd ~/web/artifact
-    ls
+    cd $HOME/backend-app/
+    npm install
 
 - name: "Where are we"
   become: true
   shell: |
     pwd && ls -la && echo "May be we are here"
-    cd web
+    cd $HOME/backend-app/
     ls -a
 
 - name: "Start Server"
   become: true
   shell: |
-    cd ~/web/
+    cd $HOME/backend-app/
     sudo pm2 stop default 
     sudo pm2 start npm -- run start
   register: web
