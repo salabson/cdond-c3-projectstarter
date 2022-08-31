@@ -7,7 +7,7 @@
 - name: "Extract tar/zip file"
   become: true
   unarchive:
-    src: /home/circleci/project/artifact.tar.gz
+    src: ~/project/artifact.tar.gz
     dest: $HOME/backend-app/
 
 - name: "Install dependecies"
