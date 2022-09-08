@@ -41,5 +41,5 @@
       - ANSIBLE_HOST_KEY_CHECKING: "{{ lookup('env', 'ANSIBLE_HOST_KEY_CHECKING')}}"  
   roles:
     - deploy
-      configure-prometheus-node-exporter
+    - configure-prometheus-node-exporter
 
